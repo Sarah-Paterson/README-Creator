@@ -28,7 +28,7 @@ const questions = [
         type: 'list-input',
         name: 'license',
         message: 'Select license used for this application.',
-        choises: [
+        choices: [
             'Apache 2.0',
             'BSD 3-Clause',
             'BSD 2-Clause',

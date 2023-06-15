@@ -77,52 +77,71 @@ const questions = [
       },
 ];
 
-// inquirer
-//   .prompt([
-//     {
-//       type: 'input',
-//       name: 'name',
-//       message: 'What is your name?',
-//     },
-//     {
-//       type: 'input',
-//       name: 'location',
-//       message: 'Where are you from?',
-//     },
-//     {
-//       type: 'input',
-//       name: 'hobby',
-//       message: 'What is your favorite hobby?',
-//     },
-//     {
-//       type: 'input',
-//       name: 'food',
-//       message: 'What is your favorite food?',
-//     },
-//     {
-//       type: 'input',
-//       name: 'github',
-//       message: 'Enter your GitHub Username',
-//     },
-//     {
-//       type: 'input',
-//       name: 'linkedin',
-//       message: 'Enter your LinkedIn URL.',
-//     },
-//   ])
-//   .then((answers) => {
-//     const htmlPageContent = generateHTML(answers);
-
-//     fs.writeFile('index.html', htmlPageContent, (err) =>
-//       err ? console.log(err) : console.log('Successfully created index.html!')
-//     );
-//   });
+const promptUser = () => {
+  return inquirer.prompt(questions);
+}
 
 // TODO: Create a function to write README file
-function writeToFile(fileName, data) {}
+const generateREADME = ({projectTitle, description, installation, usage, license, contribute, tests, github, email}) =>
+`# ${projectTitle} [![License: ${license}](${licenseLink}](${license})
+
+## Description
+${description}
+
+---
+---
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Credits](#credits)
+- [License](#license)
+
+---
+---
+
+## Installation
+${installation}
+
+---
+
+## Usage
+${usage}
+
+---
+
+## License
+
+### ${license}
+Please see licensing documentation for more information.
+
+---
+
+## Contributing
+${contribute}
+
+---
+
+## Tests
+${tests}
+
+---
+
+## Questions
+[${github} Github](https://github.com/${github})
+
+If you have any further questions concerning this project, please feel free to contact me via email, ${email}.
+`
 
 // TODO: Create a function to initialize app
-function init() {}
+const init = () => {
+  promptUser()
+    .then((answers) => writeFile('README.md', generateREADME(answers)))
+    .then(() => console.log('Successfully created README.md!'))
+    .catch((err) => console.error(err));
+};
 
 // Function call to initialize app
 init();
+

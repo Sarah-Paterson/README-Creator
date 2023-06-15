@@ -2,6 +2,8 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
 
+const { writeFile } = require('fs').promises;
+
 // TODO: Create an array of questions for user input
 const questions = [
     {
@@ -25,7 +27,7 @@ const questions = [
         message: 'How do you use this application?',
       },
       {
-        type: 'list-input',
+        type: 'list',
         name: 'license',
         message: 'Select license used for this application.',
         choices: [
@@ -77,86 +79,88 @@ const questions = [
       },
 ];
 
+const promptUser = () => {
+  return inquirer.prompt(questions);
+}
+
 let licenseLink;
 
 function getLicenseLink() {
-  if (license == 'Apache 2.0') {
+  if (promptUser.license == 'Apache 2.0') {
     licenseLink = 'https://img.shields.io/badge/License-Apache%202.0-blue.svg'
   }
-  if (license == 'BSD 3-Clause') {
+  if (promptUser.license  == 'BSD 3-Clause') {
     licenseLink = 'https://img.shields.io/badge/License-BSD%203--Clause-blue.svg'
   }
-  if (license == 'BSD 2-Clause') {
+  if (promptUser.license  == 'BSD 2-Clause') {
     licenseLink = 'https://img.shields.io/badge/License-BSD%202--Clause-orange.svg'
   }
-  if (license == 'CC BY 4.0') {
+  if (promptUser.license  == 'CC BY 4.0') {
     licenseLink = 'https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg'
   }
-  if (license == 'BY-SA 4.0') {
+  if (promptUser.license  == 'BY-SA 4.0') {
     licenseLink = 'https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg'
   }
-  if (license == 'CC BY-NC 4.0') {
+  if (promptUser.license  == 'CC BY-NC 4.0') {
     licenseLink = 'https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg'
   }
-  if (license == 'CC BY-ND 4.0') {
+  if (promptUser.license  == 'CC BY-ND 4.0') {
     licenseLink = 'https://img.shields.io/badge/License-CC%20BY--ND%204.0-lightgrey.svg'
   }
-  if (license == 'CC BY-NC-SA 4.0') {
+  if (promptUser.license  == 'CC BY-NC-SA 4.0') {
     licenseLink = 'https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg'
   }
-  if (license == 'CC BY-NC-ND 4.0') {
+  if (promptUser.license  == 'CC BY-NC-ND 4.0') {
     licenseLink = 'https://img.shields.io/badge/License-CC%20BY--NC--ND%204.0-lightgrey.svg'
   }
-  if (license == 'EPL-1.0') {
+  if (promptUser.license  == 'EPL-1.0') {
     licenseLink = 'https://img.shields.io/badge/License-EPL%201.0-red.svg'
   }
-  if (license == 'GNU GPL v3') {
+  if (promptUser.license  == 'GNU GPL v3') {
     licenseLink = 'https://img.shields.io/badge/License-GPL%20v3-blue.svg'
   }
-  if (license == 'GNU GPL v2') {
+  if (promptUser.license  == 'GNU GPL v2') {
     licenseLink = 'https://img.shields.io/badge/License-GPL%20v2-blue.svg'
   }
-  if (license == 'GNU AGPL v3') {
+  if (promptUser.license  == 'GNU AGPL v3') {
     licenseLink = 'https://img.shields.io/badge/License-AGPL%20v3-blue.svg'
   }
-  if (license == 'GNU LGPL v3') {
+  if (promptUser.license  == 'GNU LGPL v3') {
     licenseLink = 'https://img.shields.io/badge/License-LGPL%20v3-blue.svg'
   }
-  if (license == 'GNU FDL v1.3') {
+  if (promptUser.license  == 'GNU FDL v1.3') {
     licenseLink = 'https://img.shields.io/badge/License-FDL%20v1.3-blue.svg'
   }
-  if (license == 'IBM') {
+  if (promptUser.license  == 'IBM') {
     licenseLink = 'https://img.shields.io/badge/License-IPL%201.0-blue.svg'
   }
-  if (license == 'MIT') {
+  if (promptUser.license  == 'MIT') {
     licenseLink = 'https://img.shields.io/badge/License-MIT-yellow.svg'
   }
-  if (license == 'Mozilla') {
+  if (promptUser.license  == 'Mozilla') {
     licenseLink = 'https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg'
   }
-  if (license == 'BY') {
+  if (promptUser.license  == 'BY') {
     licenseLink = 'https://img.shields.io/badge/License-ODC_BY-brightgreen.svg'
   }
-  if (license == 'ODbL') {
+  if (promptUser.license  == 'ODbL') {
     licenseLink = 'https://img.shields.io/badge/License-ODbL-brightgreen.svg'
   }
-  if (license == 'PDDL') {
+  if (promptUser.license  == 'PDDL') {
     licenseLink = 'https://img.shields.io/badge/License-PDDL-brightgreen.svg'
   }
-  if (license == 'Perl') {
+  if (promptUser.license  == 'Perl') {
     licenseLink = 'https://img.shields.io/badge/License-Perl-0298c3.svg'
   }
-  if (license == 'Artistic') {
+  if (promptUser.license  == 'Artistic') {
     licenseLink = 'https://img.shields.io/badge/License-Artistic%202.0-0298c3.svg'
   }
-  if (license == 'Zlib') {
+  if (promptUser.license  == 'Zlib') {
     licenseLink = 'https://img.shields.io/badge/License-Zlib-lightgrey.svg)](https://opensource.org/licenses/Zlib'
   }
-}
-
-
-const promptUser = () => {
-  return inquirer.prompt(questions);
+  else {
+    console.log("there was an error. please try agian");
+  }
 }
 
 // TODO: Create a function to write README file
@@ -173,8 +177,10 @@ ${description}
 
 - [Installation](#installation)
 - [Usage](#usage)
-- [Credits](#credits)
 - [License](#license)
+- [Contributing](#contributing)
+- [Tests](#tests)
+- [Questions](#questions)
 
 ---
 ---

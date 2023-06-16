@@ -1,11 +1,142 @@
-// TODO: Include packages needed for this application
 const inquirer = require('inquirer');
 const fs = require('fs');
 
-const { writeFile } = require('fs').promises;
+const generateREADME = ({projectTitle, description, installation, usage, license, contribute, tests, github, email}, licenseLink) =>
+`# ${projectTitle}
+![License: ${license}](${licenseLink})
 
-// TODO: Create an array of questions for user input
-const questions = [
+## Description
+${description}
+
+---
+---
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [License](#license)
+- [Contributing](#contributing)
+- [Tests](#tests)
+- [Questions](#questions)
+
+---
+---
+
+## Installation
+${installation}
+
+---
+
+## Usage
+${usage}
+
+---
+
+## License
+
+### ${license}
+Please see licensing documentation for more information.
+
+---
+
+## Contributing
+${contribute}
+
+---
+
+## Tests
+${tests}
+
+---
+
+## Questions
+[${github} Github](https://github.com/${github})
+
+If you have any further questions concerning this project, please feel free to contact me via email, ${email}.
+`;
+
+let licenseLink;
+
+const getLicenseLink = (answers) => {
+  if (answers.license == 'Apache 2.0') {
+    licenseLink = 'https://img.shields.io/badge/License-Apache%202.0-blue.svg'
+  } else if (answers.license  == 'BSD 3-Clause') {
+    licenseLink = 'https://img.shields.io/badge/License-BSD%203--Clause-blue.svg'
+  }
+  else if (answers.license  == 'BSD 2-Clause') {
+    licenseLink = 'https://img.shields.io/badge/License-BSD%202--Clause-orange.svg'
+  }
+  else if (answers.license  == 'CC BY 4.0') {
+    licenseLink = 'https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg'
+  }
+  else if (answers.license  == 'BY-SA 4.0') {
+    licenseLink = 'https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg'
+  }
+  else if (answers.license  == 'CC BY-NC 4.0') {
+    licenseLink = 'https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg'
+  }
+  else if (answers.license  == 'CC BY-ND 4.0') {
+    licenseLink = 'https://img.shields.io/badge/License-CC%20BY--ND%204.0-lightgrey.svg'
+  }
+  else if (answers.license  == 'CC BY-NC-SA 4.0') {
+    licenseLink = 'https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg'
+  }
+  else if (answers.license  == 'CC BY-NC-ND 4.0') {
+    licenseLink = 'https://img.shields.io/badge/License-CC%20BY--NC--ND%204.0-lightgrey.svg'
+  }
+  else if (answers.license  == 'EPL-1.0') {
+    licenseLink = 'https://img.shields.io/badge/License-EPL%201.0-red.svg'
+  }
+  else if (answers.license  == 'GNU GPL v3') {
+    licenseLink = 'https://img.shields.io/badge/License-GPL%20v3-blue.svg'
+  }
+  else if (answers.license  == 'GNU GPL v2') {
+    licenseLink = 'https://img.shields.io/badge/License-GPL%20v2-blue.svg'
+  }
+  else if (answers.license  == 'GNU AGPL v3') {
+    licenseLink = 'https://img.shields.io/badge/License-AGPL%20v3-blue.svg'
+  }
+  else if (answers.license  == 'GNU LGPL v3') {
+    licenseLink = 'https://img.shields.io/badge/License-LGPL%20v3-blue.svg'
+  }
+  else if (answers.license  == 'GNU FDL v1.3') {
+    licenseLink = 'https://img.shields.io/badge/License-FDL%20v1.3-blue.svg'
+  }
+  else if (answers.license  == 'IBM') {
+    licenseLink = 'https://img.shields.io/badge/License-IPL%201.0-blue.svg'
+  }
+  else if (answers.license  == 'MIT') {
+    licenseLink = 'https://img.shields.io/badge/License-MIT-yellow.svg'
+  }
+  else if (answers.license  == 'Mozilla') {
+    licenseLink = 'https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg'
+  }
+  else if (answers.license  == 'BY') {
+    licenseLink = 'https://img.shields.io/badge/License-ODC_BY-brightgreen.svg'
+  }
+  else if (answers.license  == 'ODbL') {
+    licenseLink = 'https://img.shields.io/badge/License-ODbL-brightgreen.svg'
+  }
+  else if (answers.license  == 'PDDL') {
+    licenseLink = 'https://img.shields.io/badge/License-PDDL-brightgreen.svg'
+  }
+  else if (answers.license  == 'Perl') {
+    licenseLink = 'https://img.shields.io/badge/License-Perl-0298c3.svg'
+  }
+  else if (answers.license  == 'Artistic') {
+    licenseLink = 'https://img.shields.io/badge/License-Artistic%202.0-0298c3.svg'
+  }
+  else if (answers.license  == 'Zlib') {
+    licenseLink = 'https://img.shields.io/badge/License-Zlib-lightgrey.svg)](https://opensource.org/licenses/Zlib'
+  }
+  else {
+    console.log("there was an error. please try agian");
+  }
+};
+
+inquirer
+  .prompt([
     {
         type: 'input',
         name: 'projectTitle',
@@ -77,156 +208,12 @@ const questions = [
         name: 'email',
         message: 'Enter your email address.',
       },
-];
+  ])
+  .then((answers) => {
+    const theLink = getLicenseLink(answers);
+    const READMEPageContent = generateREADME(answers, licenseLink);
 
-const promptUser = () => {
-  return inquirer.prompt(questions);
-}
-
-let licenseLink;
-
-function getLicenseLink() {
-  if (promptUser.license == 'Apache 2.0') {
-    licenseLink = 'https://img.shields.io/badge/License-Apache%202.0-blue.svg'
-  }
-  if (promptUser.license  == 'BSD 3-Clause') {
-    licenseLink = 'https://img.shields.io/badge/License-BSD%203--Clause-blue.svg'
-  }
-  if (promptUser.license  == 'BSD 2-Clause') {
-    licenseLink = 'https://img.shields.io/badge/License-BSD%202--Clause-orange.svg'
-  }
-  if (promptUser.license  == 'CC BY 4.0') {
-    licenseLink = 'https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg'
-  }
-  if (promptUser.license  == 'BY-SA 4.0') {
-    licenseLink = 'https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg'
-  }
-  if (promptUser.license  == 'CC BY-NC 4.0') {
-    licenseLink = 'https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg'
-  }
-  if (promptUser.license  == 'CC BY-ND 4.0') {
-    licenseLink = 'https://img.shields.io/badge/License-CC%20BY--ND%204.0-lightgrey.svg'
-  }
-  if (promptUser.license  == 'CC BY-NC-SA 4.0') {
-    licenseLink = 'https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg'
-  }
-  if (promptUser.license  == 'CC BY-NC-ND 4.0') {
-    licenseLink = 'https://img.shields.io/badge/License-CC%20BY--NC--ND%204.0-lightgrey.svg'
-  }
-  if (promptUser.license  == 'EPL-1.0') {
-    licenseLink = 'https://img.shields.io/badge/License-EPL%201.0-red.svg'
-  }
-  if (promptUser.license  == 'GNU GPL v3') {
-    licenseLink = 'https://img.shields.io/badge/License-GPL%20v3-blue.svg'
-  }
-  if (promptUser.license  == 'GNU GPL v2') {
-    licenseLink = 'https://img.shields.io/badge/License-GPL%20v2-blue.svg'
-  }
-  if (promptUser.license  == 'GNU AGPL v3') {
-    licenseLink = 'https://img.shields.io/badge/License-AGPL%20v3-blue.svg'
-  }
-  if (promptUser.license  == 'GNU LGPL v3') {
-    licenseLink = 'https://img.shields.io/badge/License-LGPL%20v3-blue.svg'
-  }
-  if (promptUser.license  == 'GNU FDL v1.3') {
-    licenseLink = 'https://img.shields.io/badge/License-FDL%20v1.3-blue.svg'
-  }
-  if (promptUser.license  == 'IBM') {
-    licenseLink = 'https://img.shields.io/badge/License-IPL%201.0-blue.svg'
-  }
-  if (promptUser.license  == 'MIT') {
-    licenseLink = 'https://img.shields.io/badge/License-MIT-yellow.svg'
-  }
-  if (promptUser.license  == 'Mozilla') {
-    licenseLink = 'https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg'
-  }
-  if (promptUser.license  == 'BY') {
-    licenseLink = 'https://img.shields.io/badge/License-ODC_BY-brightgreen.svg'
-  }
-  if (promptUser.license  == 'ODbL') {
-    licenseLink = 'https://img.shields.io/badge/License-ODbL-brightgreen.svg'
-  }
-  if (promptUser.license  == 'PDDL') {
-    licenseLink = 'https://img.shields.io/badge/License-PDDL-brightgreen.svg'
-  }
-  if (promptUser.license  == 'Perl') {
-    licenseLink = 'https://img.shields.io/badge/License-Perl-0298c3.svg'
-  }
-  if (promptUser.license  == 'Artistic') {
-    licenseLink = 'https://img.shields.io/badge/License-Artistic%202.0-0298c3.svg'
-  }
-  if (promptUser.license  == 'Zlib') {
-    licenseLink = 'https://img.shields.io/badge/License-Zlib-lightgrey.svg)](https://opensource.org/licenses/Zlib'
-  }
-  else {
-    console.log("there was an error. please try agian");
-  }
-}
-
-// TODO: Create a function to write README file
-const generateREADME = ({projectTitle, description, installation, usage, license, licenseLink, contribute, tests, github, email}) =>
-`# ${projectTitle} [![License: ${license}](${licenseLink}](${license})
-
-## Description
-${description}
-
----
----
-
-## Table of Contents
-
-- [Installation](#installation)
-- [Usage](#usage)
-- [License](#license)
-- [Contributing](#contributing)
-- [Tests](#tests)
-- [Questions](#questions)
-
----
----
-
-## Installation
-${installation}
-
----
-
-## Usage
-${usage}
-
----
-
-## License
-
-### ${license}
-Please see licensing documentation for more information.
-
----
-
-## Contributing
-${contribute}
-
----
-
-## Tests
-${tests}
-
----
-
-## Questions
-[${github} Github](https://github.com/${github})
-
-If you have any further questions concerning this project, please feel free to contact me via email, ${email}.
-`
-
-// TODO: Create a function to initialize app
-const init = () => {
-  promptUser()
-    .then(getLicenseLink)
-    .then((answers) => writeFile('README.md', generateREADME(answers)))
-    .then(() => console.log('Successfully created README.md!'))
-    .catch((err) => console.error(err));
-};
-
-// Function call to initialize app
-init();
-
+    fs.writeFile('README.md', READMEPageContent, (err) =>
+      err ? console.log(err) : console.log('Successfully created README.md!')
+    );
+  });

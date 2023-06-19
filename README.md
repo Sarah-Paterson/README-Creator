@@ -32,14 +32,7 @@ In order to run this program, the user will have to have node.js installed on th
 ## Usage
 
 To use the README creator, start with node index.js. From here the user will be prompted to answer a series of questions for their README.
-
-### Answering Questions
-![Questions](assets "Questions")
-
 Once all the questions are answered, a README.md file will be created using the answers provided.
-
-### New README
-![README](assets "README")
 
 ---
 
